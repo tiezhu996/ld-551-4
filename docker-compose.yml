@@ -1,0 +1,68 @@
+name: ldeduflow
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ${COMPOSE_PROJECT_NAME:-ldeduflow}-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-eduflow}
+      POSTGRES_USER: ${POSTGRES_USER:-eduflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eduflow}
+    ports:
+      - "${POSTGRES_PORT:-54321}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-eduflow} -d ${POSTGRES_DB:-eduflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: ${COMPOSE_PROJECT_NAME:-ldeduflow}-redis
+    ports:
+      - "${REDIS_PORT:-63791}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+    container_name: ${COMPOSE_PROJECT_NAME:-ldeduflow}-backend
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://eduflow:eduflow@postgres:5432/eduflow}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:38401}
+    ports:
+      - "${BACKEND_PORT:-38501}:38501"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:38501/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: ${COMPOSE_PROJECT_NAME:-ldeduflow}-frontend
+    ports:
+      - "${FRONTEND_PORT:-38401}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
