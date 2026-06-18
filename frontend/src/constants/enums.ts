@@ -29,6 +29,17 @@ export enum UserRole {
   ADMIN = 'ADMIN'
 }
 
+export enum CouponType {
+  FIXED = 'FIXED',
+  PERCENTAGE = 'PERCENTAGE'
+}
+
+export enum CouponStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  EXPIRED = 'EXPIRED'
+}
+
 export const courseLevelLabel: Record<CourseLevel, string> = {
   [CourseLevel.BEGINNER]: '入门',
   [CourseLevel.INTERMEDIATE]: '进阶',

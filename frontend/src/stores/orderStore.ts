@@ -7,8 +7,12 @@ import request from '@/utils/request'
 export const useOrderStore = defineStore('order', () => {
   const currentOrder = ref<Order | null>(null)
 
-  async function createOrder(courseId: number) {
-    currentOrder.value = await request.post<unknown, Order>('/orders', { course_id: courseId, payment_method: 'mock' })
+  async function createOrder(courseId: number, couponCode?: string) {
+    const payload: Record<string, unknown> = { course_id: courseId, payment_method: 'mock' }
+    if (couponCode) {
+      payload.coupon_code = couponCode
+    }
+    currentOrder.value = await request.post<unknown, Order>('/orders', payload)
     return currentOrder.value
   }
 

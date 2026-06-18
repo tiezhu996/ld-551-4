@@ -12,7 +12,14 @@ router = APIRouter(prefix="/orders", tags=["orders"])
 
 @router.post("", response_model=OrderResponse)
 def create_order(payload: OrderCreate, request: Request, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return PaymentService.create_order(db, user, payload.course_id, payload.payment_method, request.client.host if request.client else None)
+    return PaymentService.create_order(
+        db,
+        user,
+        payload.course_id,
+        payload.payment_method,
+        payload.coupon_code,
+        request.client.host if request.client else None,
+    )
 
 
 @router.post("/{order_id}/pay", response_model=OrderResponse)

@@ -11,6 +11,7 @@ const router = createRouter({
     { path: '/learn/:courseId', component: () => import('@/pages/learn/LearnPage.vue'), meta: { requiresAuth: true, roles: [UserRole.STUDENT, UserRole.ADMIN] } },
     { path: '/dashboard', component: () => import('@/pages/Dashboard.vue'), meta: { requiresAuth: true, roles: [UserRole.STUDENT, UserRole.ADMIN] } },
     { path: '/instructor/courses', component: () => import('@/pages/instructor/Courses.vue'), meta: { requiresAuth: true, roles: [UserRole.INSTRUCTOR, UserRole.ADMIN] } },
+    { path: '/admin/coupons', component: () => import('@/pages/admin/Coupons.vue'), meta: { requiresAuth: true, roles: [UserRole.ADMIN] } },
     { path: '/login', component: () => import('@/pages/auth/Login.vue') },
     { path: '/register', component: () => import('@/pages/auth/Register.vue') },
     { path: '/403', component: { template: '<main class="empty-page"><h1>403</h1><p>无权限访问</p></main>' } }

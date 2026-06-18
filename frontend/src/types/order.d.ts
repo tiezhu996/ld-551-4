@@ -6,6 +6,10 @@ export interface Order {
   user_id: number
   course_id: number
   amount: string | number
+  original_amount: string | number
+  coupon_id: number | null
+  discount_amount: string | number
+  coupon_code: string | null
   payment_method: string
   status: OrderStatus
   paid_at?: string

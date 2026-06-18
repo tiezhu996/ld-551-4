@@ -9,6 +9,7 @@ from app.constants.enums import OrderStatus
 class OrderCreate(BaseModel):
     course_id: int
     payment_method: str = "mock"
+    coupon_code: str | None = None
 
 
 class PaymentConfirm(BaseModel):
@@ -22,6 +23,10 @@ class OrderResponse(BaseModel):
     user_id: int
     course_id: int
     amount: Decimal
+    original_amount: Decimal
+    coupon_id: int | None
+    discount_amount: Decimal
+    coupon_code: str | None
     payment_method: str
     status: OrderStatus
     paid_at: datetime | None

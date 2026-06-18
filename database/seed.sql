@@ -30,9 +30,22 @@ INSERT INTO lesson_progress (id, enrollment_id, lesson_id, score) VALUES
   (1, 1, 1, NULL)
 ON CONFLICT (id) DO NOTHING;
 
+INSERT INTO coupons (id, code, name, type, value, min_amount, max_discount, total_quantity, used_quantity, per_user_limit, valid_from, valid_until, status, description) VALUES
+  (1, 'NEWUSER50', '新人专享券', 'FIXED', 50.00, 100.00, NULL, 1000, 0, 1, NOW(), NOW() + INTERVAL '30 days', 'ACTIVE', '新用户首单立减50元'),
+  (2, 'SUMMER20', '夏日特惠8折', 'PERCENTAGE', 20.00, 0.00, 100.00, 500, 0, 2, NOW(), NOW() + INTERVAL '60 days', 'ACTIVE', '全场8折，最高抵扣100元'),
+  (3, 'VIP100', 'VIP专属券', 'FIXED', 100.00, 200.00, NULL, -1, 0, 1, NOW(), NOW() + INTERVAL '90 days', 'ACTIVE', 'VIP会员专享100元券')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO coupon_courses (id, coupon_id, course_id) VALUES
+  (1, 1, 1),
+  (2, 3, 1)
+ON CONFLICT (id) DO NOTHING;
+
 SELECT setval('users_id_seq', 10, true);
 SELECT setval('courses_id_seq', 10, true);
 SELECT setval('chapters_id_seq', 10, true);
 SELECT setval('lessons_id_seq', 10, true);
 SELECT setval('enrollments_id_seq', 10, true);
 SELECT setval('lesson_progress_id_seq', 10, true);
+SELECT setval('coupons_id_seq', 10, true);
+SELECT setval('coupon_courses_id_seq', 10, true);

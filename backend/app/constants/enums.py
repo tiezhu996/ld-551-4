@@ -30,3 +30,14 @@ class UserRole(StrEnum):
     STUDENT = "STUDENT"
     INSTRUCTOR = "INSTRUCTOR"
     ADMIN = "ADMIN"
+
+
+class CouponType(StrEnum):
+    FIXED = "FIXED"
+    PERCENTAGE = "PERCENTAGE"
+
+
+class CouponStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    EXPIRED = "EXPIRED"

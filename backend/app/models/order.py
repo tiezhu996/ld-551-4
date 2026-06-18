@@ -23,5 +23,11 @@ class Order(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
+    original_amount: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
+    coupon_id: Mapped[int | None] = mapped_column(ForeignKey("coupons.id"), nullable=True)
+    discount_amount: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=0, nullable=False)
+    coupon_code: Mapped[str | None] = mapped_column(String(50), nullable=True)
+
     user = relationship("User", back_populates="orders")
     course = relationship("Course", back_populates="orders")
+    coupon = relationship("Coupon")

@@ -6,6 +6,7 @@
         <RouterLink to="/courses">课程</RouterLink>
         <RouterLink to="/dashboard">仪表盘</RouterLink>
         <RouterLink v-permission="[UserRole.INSTRUCTOR, UserRole.ADMIN]" to="/instructor/courses">讲师管理</RouterLink>
+        <RouterLink v-permission="[UserRole.ADMIN]" to="/admin/coupons">优惠券</RouterLink>
       </nav>
       <div class="account">
         <span v-if="auth.user">{{ auth.user.name }} · {{ auth.user.role }}</span>
